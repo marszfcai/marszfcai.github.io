@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>JDK8--元空间(Metaspace)替换永久代(PermGen) | Marszfcai</title>
 <meta name="description" content="温故而知新" />
-<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1570101969557">
+<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1570112258954">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://marszfcai.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://marszfcai.github.io">
-  <img class="avatar" src="https://marszfcai.github.io/images/avatar.png?v=1570101969557" alt="">
+  <img class="avatar" src="https://marszfcai.github.io/images/avatar.png?v=1570112258954" alt="">
   </a>
   <h1 class="site-title">
     Marszfcai
@@ -95,7 +95,16 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <!-- more -->
+                <p>JDK8起，Hotspot JVM 废弃永久代，同时将类元数据移动到本地内存（Metaspace），而字符串常量池以及类的静态变量则存储在堆区</p>
+<!-- more -->
+<h4 id="原因">原因</h4>
+<ul>
+<li>新类元数据的分配将受可用本机内存量的限制，而不是固定的由-XX：MaxPermSize参数指定的值，无论是默认值还是在命令行中指定的值。</li>
+<li>简化 Full GC 的前置（JEP 156）</li>
+<li>合并JRockit的一部分，JRockitm没有永久代</li>
+</ul>
+<h4 id="风险">风险</h4>
+<p>将内部字符串和类静态变量移至Java堆可能会导致内存不足异常或GC数量增加。用户可能需要对-Xmx进行一些调整。</p>
 <h2 id="参考资料">参考资料</h2>
 <ul>
 <li>
@@ -120,6 +129,16 @@
                 <ul class="markdownIt-TOC">
 <li>
 <ul>
+<li>
+<ul>
+<li>
+<ul>
+<li><a href="#%E5%8E%9F%E5%9B%A0">原因</a></li>
+<li><a href="#%E9%A3%8E%E9%99%A9">风险</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li><a href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99">参考资料</a></li>
 </ul>
 </li>
