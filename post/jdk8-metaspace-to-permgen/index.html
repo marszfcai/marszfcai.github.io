@@ -4,12 +4,12 @@
     <meta charset="utf-8" >
 
 <title>JDK8--元空间(Metaspace)替换永久代(PermGen) | Marszfcai</title>
-<meta name="description" content="">
+<meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1570181131656">
+<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1570192162376">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://marszfcai.github.io/styles/main.css">
 
@@ -36,8 +36,9 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://marszfcai.github.io">
-        <img src="https://marszfcai.github.io/images/avatar.png?v=1570181131656" class="site-logo">
+        <img src="https://marszfcai.github.io/images/avatar.png?v=1570192162376" class="site-logo">
         <h1 class="site-title">Marszfcai</h1>
+        <div class="site-description">温故而知新</div>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
         <div class="line"></div>
@@ -46,26 +47,14 @@
     <div>
       
         
-          <a href="/" class="site-nav">
+          <a href="https://marszfcai.github.io" class="site-nav">
             首页
           </a>
         
       
         
-          <a href="/archives" class="site-nav">
-            归档
-          </a>
-        
-      
-        
-          <a href="/tags" class="site-nav">
+          <a href="https://marszfcai.github.io/tags" class="site-nav">
             标签
-          </a>
-        
-      
-        
-          <a href="/post/about" class="site-nav">
-            关于
           </a>
         
       
@@ -85,11 +74,8 @@
         
       
     </div>
-    <div class="site-description">
-      
-    </div>
     <div class="site-footer">
-       | <a class="rss" href="https://marszfcai.github.io/atom.xml" target="_blank">RSS</a>
+      
     </div>
   </div>
 </div>
@@ -104,7 +90,7 @@
             <div class="post-content">
               <p>JDK8起，Hotspot JVM 废弃永久代（PermGen），同时将类元数据存储在本地内存，称之为元空间（Metaspace），而字符串常量池以及类的静态变量则存储在堆区。</p>
 <!-- more -->
-<h4 id="为什么要废弃永久代">为什么要废弃永久代</h4>
+<h2 id="为什么要废弃永久代">为什么要废弃永久代</h2>
 <ul>
 <li>
 <p>新类元数据的分配将受可用本机内存量的限制，而不是固定的由-XX：MaxPermSize参数指定的值，无论是默认值还是在命令行中指定的值。</p>
@@ -119,11 +105,11 @@
 <blockquote>
 <p><em><strong>注意：</strong></em> 将字符串常量池和类静态变量移至Java堆可能会导致内存不足异常或GC数量增加。用户可能需要对-Xmx进行一些调整。</p>
 </blockquote>
-<h4 id="什么是元空间metaspace">什么是元空间（metaspace）</h4>
+<h2 id="什么是元空间metaspace">什么是元空间（metaspace）</h2>
 <p>元空间是VM用于存储类的元数据的一块非堆空间的本地内存</p>
-<h4 id="什么时候分配内存allocate">什么时候分配内存（allocate）</h4>
+<h2 id="什么时候分配内存allocate">什么时候分配内存（allocate）</h2>
 <p>加载类的时候由类加载器分配</p>
-<h4 id="什么时候释放内存release">什么时候释放内存（release）</h4>
+<h2 id="什么时候释放内存release">什么时候释放内存（release）</h2>
 <p><em>卸载类加载器时释放内存，即发生在以下步骤之后才会释放</em></p>
 <ul>
 <li>
@@ -139,10 +125,10 @@
 <blockquote>
 <p><em><strong>注意：</strong></em> “释放内存”不代表将内存返回给OS，该内存全部或一部分继续保留在JVM中，可以将其重用于将来的类加载。不完全释放内存给OS就会造成碎片的产生，所以使用Metaspace会造成碎片，导致内存浪费</p>
 </blockquote>
-<h4 id="相关参数">相关参数</h4>
+<h2 id="相关vm参数">相关VM参数</h2>
 <ul>
-<li>-XX:MetaspaceSize=触发GC的阈值</li>
-<li>-XX:MaxMetaspaceSize=触发Full GC的阈值</li>
+<li>-XX:MetaspaceSize=${limit}：触发GC的阈值</li>
+<li>-XX:MaxMetaspaceSize=${limit}：触发Full GC的阈值</li>
 <li>-XX:+UseCompressedOops：开启压缩对象指针（oops：ordinary object pointers）</li>
 <li>-XX:+UseCompressedClassPointers：开启压缩类指针</li>
 <li>-XX:CompressedClassSpaceSize：仅当开启压缩类指针时生效</li>
