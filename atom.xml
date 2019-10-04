@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://marszfcai.github.io</id>
     <title>Marszfcai</title>
-    <updated>2019-10-03T14:17:41.123Z</updated>
+    <updated>2019-10-04T01:43:40.189Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://marszfcai.github.io"/>
     <link rel="self" href="https://marszfcai.github.io/atom.xml"/>
@@ -24,7 +24,7 @@
 <ul>
 <li>新类元数据的分配将受可用本机内存量的限制，而不是固定的由-XX：MaxPermSize参数指定的值，无论是默认值还是在命令行中指定的值。</li>
 <li>简化 Full GC 的前置（JEP 156）</li>
-<li>合并JRockit的一部分，JRockitm没有永久代</li>
+<li>合并JRockit的一部分，JRockit没有永久代</li>
 </ul>
 <h4 id="风险">风险</h4>
 <p>将内部字符串和类静态变量移至Java堆可能会导致内存不足异常或GC数量增加。用户可能需要对-Xmx进行一些调整。</p>
