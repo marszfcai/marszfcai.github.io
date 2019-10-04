@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://marszfcai.github.io</id>
     <title>Marszfcai</title>
-    <updated>2019-10-04T12:32:07.514Z</updated>
+    <updated>2019-10-04T12:44:19.611Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://marszfcai.github.io"/>
     <link rel="self" href="https://marszfcai.github.io/atom.xml"/>
@@ -22,15 +22,9 @@
 <!-- more -->
 <h2 id="为什么要废弃永久代">为什么要废弃永久代</h2>
 <ul>
-<li>
-<p>新类元数据的分配将受可用本机内存量的限制，而不是固定的由-XX：MaxPermSize参数指定的值，无论是默认值还是在命令行中指定的值。</p>
-</li>
-<li>
-<p>简化 Full GC 的前置（JEP 156）</p>
-</li>
-<li>
-<p>合并JRockit的一部分，JRockit没有永久代</p>
-</li>
+<li>新类元数据的分配将受可用本机内存量的限制，而不是固定的由-XX：MaxPermSize参数指定的值，无论是默认值还是在命令行中指定的值。</li>
+<li>简化 Full GC 的前置（JEP 156）</li>
+<li>合并JRockit的一部分，JRockit没有永久代</li>
 </ul>
 <blockquote>
 <p><em><strong>注意：</strong></em> 将字符串常量池和类静态变量移至Java堆可能会导致内存不足异常或GC数量增加。用户可能需要对-Xmx进行一些调整。</p>
@@ -42,15 +36,9 @@
 <h2 id="什么时候释放内存release">什么时候释放内存（release）</h2>
 <p><em>卸载类加载器时释放内存，即发生在以下步骤之后才会释放</em></p>
 <ul>
-<li>
-<p>所有该类加载器加载的所有类<strong>没有存活的实例</strong></p>
-</li>
-<li>
-<p><strong>没有引用</strong>指向该类加载器及其加载的类</p>
-</li>
-<li>
-<p>该类加载器及其加载的类正常GC</p>
-</li>
+<li>所有该类加载器加载的所有类<strong>没有存活的实例</strong></li>
+<li><strong>没有引用</strong>指向该类加载器及其加载的类</li>
+<li>该类加载器及其加载的类正常GC</li>
 </ul>
 <blockquote>
 <p><em><strong>注意：</strong></em> “释放内存”不代表将内存返回给OS，该内存全部或一部分继续保留在JVM中，可以将其重用于将来的类加载。不完全释放内存给OS就会造成碎片的产生，所以使用Metaspace会造成碎片，导致内存浪费</p>
@@ -65,24 +53,12 @@
 </ul>
 <h2 id="参考资料">参考资料</h2>
 <ul>
-<li>
-<p><a href="http://openjdk.java.net/jeps/122">官方说明 JEP122</a></p>
-</li>
-<li>
-<p><a href="https://www.cnblogs.com/yulei126/p/6777323.html">JDK8-废弃永久代（PermGen）迎来元空间（Metaspace）</a></p>
-</li>
-<li>
-<p><a href="https://www.cnblogs.com/williamjie/p/9558094.html">Metaspace 之一：Metaspace整体介绍（永久代被替换原因、元空间特点、元空间内存查看分析方法）</a></p>
-</li>
-<li>
-<p><a href="https://mp.weixin.qq.com/s/jqfppqqd98DfAJHZhFbmxA">JVM参数MetaspaceSize的误解</a></p>
-</li>
-<li>
-<p><a href="https://cloud.tencent.com/developer/article/1356779">MetaspaceSize和MaxMetaspaceSize的理解</a></p>
-</li>
-<li>
-<p><a href="https://stuefe.de/tags/metaspace/">stuefe.de系列文章</a></p>
-</li>
+<li><a href="http://openjdk.java.net/jeps/122">官方说明 JEP122</a></li>
+<li><a href="https://www.cnblogs.com/yulei126/p/6777323.html">JDK8-废弃永久代（PermGen）迎来元空间（Metaspace）</a></li>
+<li><a href="https://www.cnblogs.com/williamjie/p/9558094.html">Metaspace 之一：Metaspace整体介绍（永久代被替换原因、元空间特点、元空间内存查看分析方法）</a></li>
+<li><a href="https://mp.weixin.qq.com/s/jqfppqqd98DfAJHZhFbmxA">JVM参数MetaspaceSize的误解</a></li>
+<li><a href="https://cloud.tencent.com/developer/article/1356779">MetaspaceSize和MaxMetaspaceSize的理解</a></li>
+<li><a href="https://stuefe.de/tags/metaspace/">stuefe.de系列文章</a></li>
 </ul>
 ]]></content>
     </entry>
