@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>JDK8--元空间(Metaspace)替换永久代(PermGen) | Marszfcai</title>
 <meta name="description" content="温故而知新" />
-<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1570161105375">
+<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1570179608742">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://marszfcai.github.io/styles/main.css">
@@ -20,7 +20,7 @@
       <div class="main-content">
         <div class="site-header">
   <a href="https://marszfcai.github.io">
-  <img class="avatar" src="https://marszfcai.github.io/images/avatar.png?v=1570161105375" alt="">
+  <img class="avatar" src="https://marszfcai.github.io/images/avatar.png?v=1570179608742" alt="">
   </a>
   <h1 class="site-title">
     Marszfcai
@@ -80,7 +80,7 @@
                 2019-10-03
               </span>
               <span>
-                1 min read
+                2 min read
               </span>
               
                 <a href="https://marszfcai.github.io/tag/RFnZlUNry" class="post-tag">
@@ -95,16 +95,52 @@
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>JDK8起，Hotspot JVM 废弃永久代，同时将类元数据移动到本地内存（Metaspace），而字符串常量池以及类的静态变量则存储在堆区</p>
+                <p>JDK8起，Hotspot JVM 废弃永久代（PermGen），同时将类元数据存储在本地内存，称之为元空间（Metaspace），而字符串常量池以及类的静态变量则存储在堆区。</p>
 <!-- more -->
-<h4 id="原因">原因</h4>
+<h4 id="为什么要废弃永久代">为什么要废弃永久代</h4>
 <ul>
-<li>新类元数据的分配将受可用本机内存量的限制，而不是固定的由-XX：MaxPermSize参数指定的值，无论是默认值还是在命令行中指定的值。</li>
-<li>简化 Full GC 的前置（JEP 156）</li>
-<li>合并JRockit的一部分，JRockit没有永久代</li>
+<li>
+<p>新类元数据的分配将受可用本机内存量的限制，而不是固定的由-XX：MaxPermSize参数指定的值，无论是默认值还是在命令行中指定的值。</p>
+</li>
+<li>
+<p>简化 Full GC 的前置（JEP 156）</p>
+</li>
+<li>
+<p>合并JRockit的一部分，JRockit没有永久代</p>
+</li>
 </ul>
-<h4 id="风险">风险</h4>
-<p>将内部字符串和类静态变量移至Java堆可能会导致内存不足异常或GC数量增加。用户可能需要对-Xmx进行一些调整。</p>
+<blockquote>
+<p><em><strong>注意：</strong></em> 将字符串常量池和类静态变量移至Java堆可能会导致内存不足异常或GC数量增加。用户可能需要对-Xmx进行一些调整。</p>
+</blockquote>
+<h4 id="什么是元空间metaspace">什么是元空间（metaspace）</h4>
+<p>元空间是VM用于存储类的元数据的一块非堆空间的本地内存</p>
+<h4 id="什么时候分配内存allocate">什么时候分配内存（allocate）</h4>
+<p>加载类的时候由类加载器分配</p>
+<h4 id="什么时候释放内存release">什么时候释放内存（release）</h4>
+<p><em>卸载类加载器时释放内存</em>，即发生在以下步骤之后才会释放</p>
+<ul>
+<li>
+<p>所有该类加载器加载的所有类<strong>没有存活的实例</strong></p>
+</li>
+<li>
+<p><strong>没有引用</strong>指向该类加载器及其加载的类</p>
+</li>
+<li>
+<p>该类加载器及其加载的类正常GC</p>
+</li>
+</ul>
+<blockquote>
+<p><em><strong>注意：</strong></em> “释放内存”不代表将内存返回给OS，该内存全部或一部分继续保留在JVM中，可以将其重用于将来的类加载。</p>
+<p><em><strong>注意2：</strong></em> 不完全释放内存给OS就会造成碎片的产生，所以使用Metaspace会造成碎片，导致内存浪费</p>
+</blockquote>
+<h4 id="相关参数">相关参数</h4>
+<ul>
+<li>-XX:MetaspaceSize=触发GC的阈值</li>
+<li>-XX:MaxMetaspaceSize=触发Full GC的阈值</li>
+<li>-XX:+UseCompressedOops：开启压缩对象指针（oops：ordinary object pointers）</li>
+<li>-XX:+UseCompressedClassPointers：开启压缩类指针</li>
+<li>-XX:CompressedClassSpaceSize：仅当开启压缩类指针时生效</li>
+</ul>
 <h2 id="参考资料">参考资料</h2>
 <ul>
 <li>
@@ -136,8 +172,11 @@
 <ul>
 <li>
 <ul>
-<li><a href="#%E5%8E%9F%E5%9B%A0">原因</a></li>
-<li><a href="#%E9%A3%8E%E9%99%A9">风险</a></li>
+<li><a href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%BA%9F%E5%BC%83%E6%B0%B8%E4%B9%85%E4%BB%A3">为什么要废弃永久代</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%85%83%E7%A9%BA%E9%97%B4metaspace">什么是元空间（metaspace）</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98allocate">什么时候分配内存（allocate）</a></li>
+<li><a href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%87%8A%E6%94%BE%E5%86%85%E5%AD%98release">什么时候释放内存（release）</a></li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E5%8F%82%E6%95%B0">相关参数</a></li>
 </ul>
 </li>
 </ul>
