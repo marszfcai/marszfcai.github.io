@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://marszfcai.github.io</id>
     <title>Marszfcai</title>
-    <updated>2019-10-05T11:25:21.634Z</updated>
+    <updated>2019-10-05T14:57:09.880Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://marszfcai.github.io"/>
     <link rel="self" href="https://marszfcai.github.io/atom.xml"/>
@@ -48,10 +48,10 @@
 <h2 id="相关vm参数">相关VM参数</h2>
 <ul>
 <li>-XX:MetaspaceSize=${limit}：触发GC的阈值</li>
-<li>-XX:MaxMetaspaceSize=${limit}：触发Full GC的阈值</li>
+<li>-XX:MaxMetaspaceSize=${limit}：Metaspace的最大值，超过则OOM（默认受本机内存大小限制）</li>
 <li>-XX:+UseCompressedOops：开启压缩对象指针（oops：ordinary object pointers）</li>
-<li>-XX:+UseCompressedClassPointers：开启压缩类指针</li>
-<li>-XX:CompressedClassSpaceSize：仅当开启压缩类指针时生效</li>
+<li>-XX:+UseCompressedClassPointers：开启压缩类指针（默认打开）</li>
+<li>-XX:CompressedClassSpaceSize：压缩类空间的大小，超过则OOM（仅当开启压缩类指针时生效、默认1G）</li>
 </ul>
 <h2 id="参考资料">参考资料</h2>
 <ul>

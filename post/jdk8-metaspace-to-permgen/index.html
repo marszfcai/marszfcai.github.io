@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1570274717887">
+<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1570287427283">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link rel="stylesheet" href="https://marszfcai.github.io/styles/main.css">
 
@@ -36,7 +36,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://marszfcai.github.io">
-        <img src="https://marszfcai.github.io/images/avatar.png?v=1570274717887" class="site-logo">
+        <img src="https://marszfcai.github.io/images/avatar.png?v=1570287427283" class="site-logo">
         <h1 class="site-title">Marszfcai</h1>
         <div class="site-description">温故而知新</div>
       </a>
@@ -118,10 +118,10 @@
 <h2 id="相关vm参数">相关VM参数</h2>
 <ul>
 <li>-XX:MetaspaceSize=${limit}：触发GC的阈值</li>
-<li>-XX:MaxMetaspaceSize=${limit}：触发Full GC的阈值</li>
+<li>-XX:MaxMetaspaceSize=${limit}：Metaspace的最大值，超过则OOM（默认受本机内存大小限制）</li>
 <li>-XX:+UseCompressedOops：开启压缩对象指针（oops：ordinary object pointers）</li>
-<li>-XX:+UseCompressedClassPointers：开启压缩类指针</li>
-<li>-XX:CompressedClassSpaceSize：仅当开启压缩类指针时生效</li>
+<li>-XX:+UseCompressedClassPointers：开启压缩类指针（默认打开）</li>
+<li>-XX:CompressedClassSpaceSize：压缩类空间的大小，超过则OOM（仅当开启压缩类指针时生效、默认1G）</li>
 </ul>
 <h2 id="参考资料">参考资料</h2>
 <ul>
