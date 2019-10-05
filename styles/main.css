@@ -399,13 +399,13 @@ a {
 .post-item .left .post-title:hover {
   color: #212529;
 }
-.post-item .left .info {
-  font-size: 16px;
-}
-.post-item .left .info .post-date {
+.post-item .left .post-date {
   margin-right: 5px;
   padding: 24px 0;
   color: #adb5bd;
+}
+.post-item .left .info {
+  font-size: 16px;
 }
 .post-item .left .info .tag {
   display: inline-block;
