@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://marszfcai.github.io</id>
     <title>Marszfcai</title>
-    <updated>2019-12-21T03:22:09.285Z</updated>
+    <updated>2019-12-21T03:47:26.664Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://marszfcai.github.io"/>
     <link rel="self" href="https://marszfcai.github.io/atom.xml"/>
@@ -62,6 +62,23 @@
 <li><a href="https://cloud.tencent.com/developer/article/1356779">MetaspaceSize和MaxMetaspaceSize的理解</a></li>
 <li><a href="https://stuefe.de/tags/metaspace/">stuefe.de系列文章</a></li>
 </ul>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[禁用WSL的shell提示音]]></title>
+        <id>https://marszfcai.github.io/post/disable_wsl_shell_bell</id>
+        <link href="https://marszfcai.github.io/post/disable_wsl_shell_bell">
+        </link>
+        <updated>2018-10-13T04:05:30.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<h4 id="bash">bash</h4>
+<p>1.<code>sudo vi /etc/inputrc</code><br>
+2.取消注释 <code>set bell-style none</code><br>
+3.退出重启</p>
+<h4 id="zsh">zsh</h4>
+<p>1.<code>sudo vi ~/.zshrc</code><br>
+2.文件末尾添加<code>unsetopt beep</code><br>
+3.<code>source ~/.zshrc</code></p>
 ]]></content>
     </entry>
 </feed>
