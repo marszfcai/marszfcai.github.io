@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>禁用WSL的shell提示音 | Marszfcai</title>
+<title>随谈Java - （二）内存区域 | Marszfcai</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -84,30 +84,58 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">禁用WSL的shell提示音</h2>
-            <div class="post-date">2018-10-13</div>
+            <h2 class="post-title">随谈Java - （二）内存区域</h2>
+            <div class="post-date">2019-12-21</div>
             
             <div class="post-content">
-              <!-- more -->
-<h4 id="bash">bash</h4>
-<p>1.<code>sudo vi /etc/inputrc</code><br>
-2.取消注释 <code>set bell-style none</code><br>
-3.退出重启</p>
-<h4 id="zsh">zsh</h4>
-<p>1.<code>sudo vi ~/.zshrc</code><br>
-2.文件末尾添加<code>unsetopt beep</code><br>
-3.<code>source ~/.zshrc</code></p>
+              <p>介绍JVM内存区域各部分作用</p>
+<!-- more -->
+<h4 id="一-jvm内存区域规范">一、JVM内存区域规范</h4>
+<figure data-type="image" tabindex="1"><img src="https://upload-images.jianshu.io/upload_images/3688070-375474963be16c8c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
+<h5 id="11-各区域作用">1.1 各区域作用</h5>
+<p><strong>Java方法栈</strong>：以栈的形式存放栈帧，每一个Java方法调用的开始和结束，都伴随着栈帧的入栈和出栈；</p>
+<p><strong>本地方法栈</strong>：与Java方法栈类似，对应native方法；</p>
+<p><strong>堆</strong>：存放对象实例信息；</p>
+<p><strong>方法区</strong>：主要存放类相关信息；</p>
+<p><strong>程序计数器</strong>：记录当前线程代码执行的位置，线程上下文切换时用到；</p>
+<blockquote>
+<p>注：堆、方法区是线程共享的区域</p>
+</blockquote>
+<h5 id="12-hotspot各代对象">1.2 HotSpot各代对象</h5>
+<p><strong>Eden/S1/S2</strong>：复制算法应用，存放年轻代对象</p>
+<p><strong>Old</strong>：标记-清除/标记-整理算法应用，存放老年代对象以及做担保分配</p>
+<h4 id="二-new关键字生成对象的简化过程">二、new关键字生成对象的简化过程</h4>
+<p>1.由类加载器将类的二进制字节流加载至内存，并转化为相应的数据结构，存放在<strong>方法区</strong></p>
+<p>2.执行&lt;clinit&gt;()方法进行<strong>类初始化</strong></p>
+<blockquote>
+<p>注：1、2步前会先进行类加载检查，如果之前已经加载过了则不再加载</p>
+</blockquote>
+<p>3.<strong>堆</strong>内给对象实例分配内存</p>
+<p>4.执行&lt;init&gt;()方法进行<strong>实例初始化</strong></p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://marszfcai.github.io/tag/5k97HIHrC" class="tag">
-                    wsl
+                  <a href="https://marszfcai.github.io/tag/TUk0TXrAv" class="tag">
+                    随谈Java
+                  </a>
+                
+                  <a href="https://marszfcai.github.io/tag/TGqWEGpt9" class="tag">
+                    java
                   </a>
                 
               </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://marszfcai.github.io/post/java-class-keywords-introduction">
+                  <h3 class="post-title">
+                    随谈Java - （一）类文件结构
+                  </h3>
+                </a>
+              </div>
             
 
             

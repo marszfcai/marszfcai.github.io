@@ -1,226 +1,94 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://marszfcai.github.io</id>
-    <title>Marszfcai</title>
-    <updated>2019-12-21T04:34:41.219Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://marszfcai.github.io"/>
-    <link rel="self" href="https://marszfcai.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
-    <logo>https://marszfcai.github.io/images/avatar.png</logo>
-    <icon>https://marszfcai.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2019, Marszfcai</rights>
-    <entry>
-        <title type="html"><![CDATA[随谈Java - （二）内存区域]]></title>
-        <id>https://marszfcai.github.io/post/jvm-memspace-introduction</id>
-        <link href="https://marszfcai.github.io/post/jvm-memspace-introduction">
-        </link>
-        <updated>2019-12-21T04:33:27.000Z</updated>
-        <summary type="html"><![CDATA[<p>介绍JVM内存区域各部分作用</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>介绍JVM内存区域各部分作用</p>
-<!-- more -->
-<h4 id="一-jvm内存区域规范">一、JVM内存区域规范</h4>
-<figure data-type="image" tabindex="1"><img src="https://upload-images.jianshu.io/upload_images/3688070-375474963be16c8c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></figure>
-<h5 id="11-各区域作用">1.1 各区域作用</h5>
-<p><strong>Java方法栈</strong>：以栈的形式存放栈帧，每一个Java方法调用的开始和结束，都伴随着栈帧的入栈和出栈；</p>
-<p><strong>本地方法栈</strong>：与Java方法栈类似，对应native方法；</p>
-<p><strong>堆</strong>：存放对象实例信息；</p>
-<p><strong>方法区</strong>：主要存放类相关信息；</p>
-<p><strong>程序计数器</strong>：记录当前线程代码执行的位置，线程上下文切换时用到；</p>
-<blockquote>
-<p>注：堆、方法区是线程共享的区域</p>
-</blockquote>
-<h5 id="12-hotspot各代对象">1.2 HotSpot各代对象</h5>
-<p><strong>Eden/S1/S2</strong>：复制算法应用，存放年轻代对象</p>
-<p><strong>Old</strong>：标记-清除/标记-整理算法应用，存放老年代对象以及做担保分配</p>
-<h4 id="二-new关键字生成对象的简化过程">二、new关键字生成对象的简化过程</h4>
-<p>1.由类加载器将类的二进制字节流加载至内存，并转化为相应的数据结构，存放在<strong>方法区</strong></p>
-<p>2.执行&lt;clinit&gt;()方法进行<strong>类初始化</strong></p>
-<blockquote>
-<p>注：1、2步前会先进行类加载检查，如果之前已经加载过了则不再加载</p>
-</blockquote>
-<p>3.<strong>堆</strong>内给对象实例分配内存</p>
-<p>4.执行&lt;init&gt;()方法进行<strong>实例初始化</strong></p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[随谈Java - （一）类文件结构]]></title>
-        <id>https://marszfcai.github.io/post/java-class-keywords-introduction</id>
-        <link href="https://marszfcai.github.io/post/java-class-keywords-introduction">
-        </link>
-        <updated>2019-12-21T04:31:12.000Z</updated>
-        <summary type="html"><![CDATA[<p>介绍Java类个关键字作用</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>介绍Java类个关键字作用</p>
-<!-- more -->
-<h4 id="1package">（1）package</h4>
-<h4 id="2import">（2）import</h4>
-<p><strong>作用</strong>：编译时期编译器搜索查找并补全代码中省略的类全名</p>
-<pre><code class="language-java">// 不使用import
-public void test() {
-    java.util.ArrayList list = new java.util.ArrayList();
-}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
 
-// 使用import
-import java.util.ArrayList;
+<title>Java8 CompletableFuture指北 | Marszfcai</title>
+<meta name="description" content="温故而知新">
 
-public void test() {
-    ArrayList list = new ArrayList();
-}
-</code></pre>
-<h4 id="3类声名">（3）类声名</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>abstract</td>
-<td>抽象类,不可被实例化</td>
-</tr>
-<tr>
-<td>final</td>
-<td>不可被子类继承</td>
-</tr>
-<tr>
-<td>strictfp</td>
-<td>精确浮点计算</td>
-</tr>
-</tbody>
-</table>
-<h4 id="4变量">（4）变量</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>static</td>
-<td>不需要实例化类对象即可访问</td>
-</tr>
-<tr>
-<td>transient</td>
-<td>该变量不会被序列化和反序列化 ( 注：static的变量也不会被序列化和反序列化 )</td>
-</tr>
-<tr>
-<td>volatile</td>
-<td>保证内存可见性、禁止指令重排序</td>
-</tr>
-<tr>
-<td>final</td>
-<td>表示该变量为常量,只可以被初始化一次,且赋值之后不可改变</td>
-</tr>
-</tbody>
-</table>
-<h4 id="5方法">（5）方法</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>static</td>
-<td>不需要实例化类对象即可调用</td>
-</tr>
-<tr>
-<td>final</td>
-<td>不可被子类重写覆盖</td>
-</tr>
-<tr>
-<td>abstract</td>
-<td>相当于接口方法,没有方法体,但有抽象方法的类必须声明为抽象类</td>
-</tr>
-<tr>
-<td>synchronized</td>
-<td>同步锁</td>
-</tr>
-<tr>
-<td>strictfp</td>
-<td>精确浮点计算</td>
-</tr>
-<tr>
-<td>native</td>
-<td>本地方法(C++方法)</td>
-</tr>
-</tbody>
-</table>
-<h4 id="6代码块">（6）代码块</h4>
-<p><strong>普通代码块</strong>: 也称作构造代码块,在类实例化的时候调用,优先于构造函数执行</p>
-<p><strong>静态代码块</strong>: 类加载即执行,只加载一次</p>
-<h4 id="7内部类">（7）内部类</h4>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[JDK8--元空间(Metaspace)替换永久代(PermGen)]]></title>
-        <id>https://marszfcai.github.io/post/jdk8-metaspace-to-permgen</id>
-        <link href="https://marszfcai.github.io/post/jdk8-metaspace-to-permgen">
-        </link>
-        <updated>2019-10-03T01:42:52.000Z</updated>
-        <summary type="html"><![CDATA[<p>JDK8起，Hotspot JVM 废弃永久代（PermGen），同时将类元数据存储在本地内存，称之为元空间（Metaspace），而字符串常量池以及类的静态变量则存储在堆区。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>JDK8起，Hotspot JVM 废弃永久代（PermGen），同时将类元数据存储在本地内存，称之为元空间（Metaspace），而字符串常量池以及类的静态变量则存储在堆区。</p>
-<!-- more -->
-<h2 id="为什么要废弃永久代">为什么要废弃永久代</h2>
-<ul>
-<li>新类元数据的分配将受可用本机内存量的限制，而不是固定的由-XX：MaxPermSize参数指定的值，无论是默认值还是在命令行中指定的值。</li>
-<li>简化 Full GC 的前置（JEP 156）</li>
-<li>合并JRockit的一部分，JRockit没有永久代</li>
-</ul>
-<blockquote>
-<p><em><strong>注意：</strong></em> 将字符串常量池和类静态变量移至Java堆可能会导致内存不足异常或GC数量增加。用户可能需要对-Xmx进行一些调整。</p>
-</blockquote>
-<h2 id="什么是元空间metaspace">什么是元空间（metaspace）</h2>
-<p>元空间是VM用于存储类的元数据的一块非堆空间的本地内存</p>
-<h2 id="什么时候分配内存allocate">什么时候分配内存（allocate）</h2>
-<p>加载类的时候由类加载器分配</p>
-<figure data-type="image" tabindex="1"><img src="https://marszfcai.github.io/post-images/1570274629159.png" alt=""></figure>
-<h2 id="什么时候释放内存release">什么时候释放内存（release）</h2>
-<p><em>卸载类加载器时释放内存，即发生在以下步骤之后才会释放</em></p>
-<ul>
-<li>所有该类加载器加载的所有类<strong>没有存活的实例</strong></li>
-<li><strong>没有引用</strong>指向该类加载器及其加载的类</li>
-<li>该类加载器及其加载的类正常GC</li>
-</ul>
-<figure data-type="image" tabindex="2"><img src="https://marszfcai.github.io/post-images/1570274674175.png" alt=""></figure>
-<blockquote>
-<p><em><strong>注意：</strong></em> “释放内存”不代表将内存返回给OS，该内存全部或一部分继续保留在JVM中，可以将其重用于将来的类加载。不完全释放内存给OS就会造成碎片的产生，所以使用Metaspace会造成碎片，导致内存浪费</p>
-</blockquote>
-<h2 id="相关vm参数">相关VM参数</h2>
-<ul>
-<li>-XX:MetaspaceSize=${limit}：触发GC的阈值</li>
-<li>-XX:MaxMetaspaceSize=${limit}：Metaspace的最大值，超过则OOM（默认受本机内存大小限制）</li>
-<li>-XX:+UseCompressedOops：开启压缩对象指针（oops：ordinary object pointers）</li>
-<li>-XX:+UseCompressedClassPointers：开启压缩类指针（默认打开）</li>
-<li>-XX:CompressedClassSpaceSize：压缩类空间的大小，超过则OOM（仅当开启压缩类指针时生效、默认1G）</li>
-</ul>
-<h2 id="参考资料">参考资料</h2>
-<ul>
-<li><a href="http://openjdk.java.net/jeps/122">官方说明 JEP122</a></li>
-<li><a href="https://www.cnblogs.com/yulei126/p/6777323.html">JDK8-废弃永久代（PermGen）迎来元空间（Metaspace）</a></li>
-<li><a href="https://www.cnblogs.com/williamjie/p/9558094.html">Metaspace 之一：Metaspace整体介绍（永久代被替换原因、元空间特点、元空间内存查看分析方法）</a></li>
-<li><a href="https://mp.weixin.qq.com/s/jqfppqqd98DfAJHZhFbmxA">JVM参数MetaspaceSize的误解</a></li>
-<li><a href="https://cloud.tencent.com/developer/article/1356779">MetaspaceSize和MaxMetaspaceSize的理解</a></li>
-<li><a href="https://stuefe.de/tags/metaspace/">stuefe.de系列文章</a></li>
-</ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Java8 CompletableFuture指北]]></title>
-        <id>https://marszfcai.github.io/post/java8-completablefuture-quick-start</id>
-        <link href="https://marszfcai.github.io/post/java8-completablefuture-quick-start">
-        </link>
-        <updated>2019-05-23T04:27:29.000Z</updated>
-        <content type="html"><![CDATA[<!-- more -->
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://marszfcai.github.io/favicon.ico?v=1576902876703">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://marszfcai.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://marszfcai.github.io">
+        <img src="https://marszfcai.github.io/images/avatar.png?v=1576902876703" class="site-logo">
+        <h1 class="site-title">Marszfcai</h1>
+        <div class="site-description">温故而知新</div>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="https://marszfcai.github.io" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="https://marszfcai.github.io/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-footer">
+      
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Java8 CompletableFuture指北</h2>
+            <div class="post-date">2019-05-23</div>
+            
+            <div class="post-content">
+              <!-- more -->
 <h2 id="一-java-异步处理的演变">一、JAVA 异步处理的演变</h2>
 <h4 id="11-future">1.1 Future</h4>
 <p>JDK 5引入了Future模式。Future模式是多线程设计常用的一种设计模式。Future模式可以理解成：我有一个任务，提交给了Future，Future替我完成这个任务。期间可以去做其他事情，一段时间之后，我便可以从Future那儿取出结果。Future接口是Java多线程Future模式的实现，在java.util.concurrent包中，可以来进行异步计算。</p>
@@ -545,23 +413,88 @@ if(!CollectionUtils.isEmpty(tasks)) {
 <p><a href="http://www.marccarre.com/2016/05/08/java-8-concurrency-completablefuture-in-practice.html">Java 8 Concurrency - CompletableFuture in practice</a></p>
 </li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[禁用WSL的shell提示音]]></title>
-        <id>https://marszfcai.github.io/post/disable_wsl_shell_bell</id>
-        <link href="https://marszfcai.github.io/post/disable_wsl_shell_bell">
-        </link>
-        <updated>2018-10-13T04:05:30.000Z</updated>
-        <content type="html"><![CDATA[<!-- more -->
-<h4 id="bash">bash</h4>
-<p>1.<code>sudo vi /etc/inputrc</code><br>
-2.取消注释 <code>set bell-style none</code><br>
-3.退出重启</p>
-<h4 id="zsh">zsh</h4>
-<p>1.<code>sudo vi ~/.zshrc</code><br>
-2.文件末尾添加<code>unsetopt beep</code><br>
-3.<code>source ~/.zshrc</code></p>
-]]></content>
-    </entry>
-</feed>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://marszfcai.github.io/tag/TGqWEGpt9" class="tag">
+                    java
+                  </a>
+                
+                  <a href="https://marszfcai.github.io/tag/8XPvfLpsTb" class="tag">
+                    completableFuture
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://marszfcai.github.io/post/disable_wsl_shell_bell">
+                  <h3 class="post-title">
+                    禁用WSL的shell提示音
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'e955888c8260a42468f1',
+        clientSecret: '8daccb94bbda4e800db6da385da5a6705e759ac8',
+        repo: 'marszfcai.github.io',
+        owner: 'marszfcai',
+        admin: ['marszfcai'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
