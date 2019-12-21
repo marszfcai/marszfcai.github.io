@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://marszfcai.github.io</id>
     <title>Marszfcai</title>
-    <updated>2019-12-21T04:34:41.219Z</updated>
+    <updated>2019-12-21T04:38:44.345Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://marszfcai.github.io"/>
     <link rel="self" href="https://marszfcai.github.io/atom.xml"/>
@@ -10,6 +10,95 @@
     <logo>https://marszfcai.github.io/images/avatar.png</logo>
     <icon>https://marszfcai.github.io/favicon.ico</icon>
     <rights>All rights reserved 2019, Marszfcai</rights>
+    <entry>
+        <title type="html"><![CDATA[解析binlog 常用命令]]></title>
+        <id>https://marszfcai.github.io/post/binlog-common-command</id>
+        <link href="https://marszfcai.github.io/post/binlog-common-command">
+        </link>
+        <updated>2019-12-21T04:37:43.000Z</updated>
+        <content type="html"><![CDATA[<!-- more -->
+<h3 id="一-mysql命令sql">一、MySQL命令（sql）</h3>
+<h4 id="查看是否开启binlog">查看是否开启binlog</h4>
+<pre><code class="language-sql">SHOW VARIABLES LIKE 'log_bin'; -- ON为开启
+</code></pre>
+<h4 id="查看binlog存放位置">查看binlog存放位置</h4>
+<pre><code class="language-sql">SHOW VARIABLES LIKE 'datadir';
+-- 或者由 `my.cnf` / `my.ini` 文件指定
+-- log-bin=/usr/logs/mysql-bin
+</code></pre>
+<h4 id="查看binlog日志列表">查看binlog日志列表</h4>
+<pre><code class="language-sql">SHOW MASTER logs;
+</code></pre>
+<h3 id="二-使用mysqlbinlog工具解析shell">二、使用mysqlbinlog工具解析（shell）</h3>
+<h4 id="指定数据库">指定数据库</h4>
+<pre><code class="language-shell">mysqlbinlog -database #databaseName mysqld-bin.000001
+</code></pre>
+<h4 id="格式化">格式化</h4>
+<pre><code class="language-shell">mysqlbinlog --base64-output=decode-rows -v mysqld-bin.000001
+# 或者
+mysqlbinlog --base64-output=decode-rows -vv mysqld-bin.000001
+</code></pre>
+<h4 id="获取指定时间段">获取指定时间段</h4>
+<pre><code class="language-shell"># [start_datetime,stop_datetime)
+mysqlbinlog --start-datetime=&quot;2017-08-16 10:00:00&quot; --stop-datetime=&quot;2017-01-09 18:00:00&quot; mysqld-bin.000001
+</code></pre>
+<h3 id="三-结合grep命令">三、结合grep命令</h3>
+<pre><code class="language-shell"># 临时文件
+mysqlbinlog --base64-output=decode-rows -v mysqld-bin.000001 &gt; temp.sql
+
+# 找出匹配'tableName'的sql 
+grep -w tableName temp.sql &gt; output.sql
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[随谈Java -  (三) 对象的生命周期]]></title>
+        <id>https://marszfcai.github.io/post/java-object-lifecycle</id>
+        <link href="https://marszfcai.github.io/post/java-object-lifecycle">
+        </link>
+        <updated>2019-12-21T04:34:57.000Z</updated>
+        <summary type="html"><![CDATA[<p>介绍对象的生命周期</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>介绍对象的生命周期</p>
+<!-- more -->
+<h5 id="1-类加载">1、类加载</h5>
+<ul>
+<li>类加载器将类信息加载到JVM的内存（方法区）</li>
+<li>为静态变量分配内存并赋零值，常量则直接赋值</li>
+<li>如果符合以下情况则执行类的初始化方法：为静态变量赋值、执行静态代码块
+<ul>
+<li>通过new关键字实例化对象、读取或设置类的静态变量、调用类的静态方法</li>
+<li>通过反射方式执行以上三种行为</li>
+<li>初始化子类的时候会触发父类的初始化</li>
+<li>作为程序的入口直接运行（main方法）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>注1：可使用javap -c 可以看出JVM会把静态变量的赋值合并到静态代码块<br>
+注2：如果直接使用类加载器加载类不会触发执行类的初始化方法</p>
+</blockquote>
+<pre><code>&gt; 追踪类加载的参数
+1）-XX:+TraceClassLoading：加载
+2）-XX:+TraceClassUnloading：卸载
+3）-verbose:class：等价于上面两个
+</code></pre>
+<h5 id="2-创建对象">2、创建对象</h5>
+<ul>
+<li>为成员变量分配内存并赋零值</li>
+<li>执行对象的初始化方法：为变量赋值，执行普通代码块，执行构造方法</li>
+</ul>
+<blockquote>
+<p>注：可使用javap -c 可以看出JVM会把成员变量的赋值、普通代码块合并到构造方法（重载的构造方法也会）</p>
+</blockquote>
+<h5 id="3-gc">3、GC</h5>
+<ul>
+<li>可达性检测</li>
+<li>执行finalize()方法</li>
+<li>回收</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[随谈Java - （二）内存区域]]></title>
         <id>https://marszfcai.github.io/post/jvm-memspace-introduction</id>

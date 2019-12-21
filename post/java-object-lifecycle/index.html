@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>随谈Java - （一）类文件结构 | Marszfcai</title>
+<title>随谈Java -  (三) 对象的生命周期 | Marszfcai</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -84,116 +84,48 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">随谈Java - （一）类文件结构</h2>
+            <h2 class="post-title">随谈Java -  (三) 对象的生命周期</h2>
             <div class="post-date">2019-12-21</div>
             
             <div class="post-content">
-              <p>介绍Java类个关键字作用</p>
+              <p>介绍对象的生命周期</p>
 <!-- more -->
-<h4 id="1package">（1）package</h4>
-<h4 id="2import">（2）import</h4>
-<p><strong>作用</strong>：编译时期编译器搜索查找并补全代码中省略的类全名</p>
-<pre><code class="language-java">// 不使用import
-public void test() {
-    java.util.ArrayList list = new java.util.ArrayList();
-}
-
-// 使用import
-import java.util.ArrayList;
-
-public void test() {
-    ArrayList list = new ArrayList();
-}
+<h5 id="1-类加载">1、类加载</h5>
+<ul>
+<li>类加载器将类信息加载到JVM的内存（方法区）</li>
+<li>为静态变量分配内存并赋零值，常量则直接赋值</li>
+<li>如果符合以下情况则执行类的初始化方法：为静态变量赋值、执行静态代码块
+<ul>
+<li>通过new关键字实例化对象、读取或设置类的静态变量、调用类的静态方法</li>
+<li>通过反射方式执行以上三种行为</li>
+<li>初始化子类的时候会触发父类的初始化</li>
+<li>作为程序的入口直接运行（main方法）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>注1：可使用javap -c 可以看出JVM会把静态变量的赋值合并到静态代码块<br>
+注2：如果直接使用类加载器加载类不会触发执行类的初始化方法</p>
+</blockquote>
+<pre><code>&gt; 追踪类加载的参数
+1）-XX:+TraceClassLoading：加载
+2）-XX:+TraceClassUnloading：卸载
+3）-verbose:class：等价于上面两个
 </code></pre>
-<h4 id="3类声名">（3）类声名</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>abstract</td>
-<td>抽象类,不可被实例化</td>
-</tr>
-<tr>
-<td>final</td>
-<td>不可被子类继承</td>
-</tr>
-<tr>
-<td>strictfp</td>
-<td>精确浮点计算</td>
-</tr>
-</tbody>
-</table>
-<h4 id="4变量">（4）变量</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>static</td>
-<td>不需要实例化类对象即可访问</td>
-</tr>
-<tr>
-<td>transient</td>
-<td>该变量不会被序列化和反序列化 ( 注：static的变量也不会被序列化和反序列化 )</td>
-</tr>
-<tr>
-<td>volatile</td>
-<td>保证内存可见性、禁止指令重排序</td>
-</tr>
-<tr>
-<td>final</td>
-<td>表示该变量为常量,只可以被初始化一次,且赋值之后不可改变</td>
-</tr>
-</tbody>
-</table>
-<h4 id="5方法">（5）方法</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>static</td>
-<td>不需要实例化类对象即可调用</td>
-</tr>
-<tr>
-<td>final</td>
-<td>不可被子类重写覆盖</td>
-</tr>
-<tr>
-<td>abstract</td>
-<td>相当于接口方法,没有方法体,但有抽象方法的类必须声明为抽象类</td>
-</tr>
-<tr>
-<td>synchronized</td>
-<td>同步锁</td>
-</tr>
-<tr>
-<td>strictfp</td>
-<td>精确浮点计算</td>
-</tr>
-<tr>
-<td>native</td>
-<td>本地方法(C++方法)</td>
-</tr>
-</tbody>
-</table>
-<h4 id="6代码块">（6）代码块</h4>
-<p><strong>普通代码块</strong>: 也称作构造代码块,在类实例化的时候调用,优先于构造函数执行</p>
-<p><strong>静态代码块</strong>: 类加载即执行,只加载一次</p>
-<h4 id="7内部类">（7）内部类</h4>
+<h5 id="2-创建对象">2、创建对象</h5>
+<ul>
+<li>为成员变量分配内存并赋零值</li>
+<li>执行对象的初始化方法：为变量赋值，执行普通代码块，执行构造方法</li>
+</ul>
+<blockquote>
+<p>注：可使用javap -c 可以看出JVM会把成员变量的赋值、普通代码块合并到构造方法（重载的构造方法也会）</p>
+</blockquote>
+<h5 id="3-gc">3、GC</h5>
+<ul>
+<li>可达性检测</li>
+<li>执行finalize()方法</li>
+<li>回收</li>
+</ul>
 
             </div>
             
@@ -212,9 +144,9 @@ public void test() {
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://marszfcai.github.io/post/jdk8-metaspace-to-permgen">
+                <a href="https://marszfcai.github.io/post/jvm-memspace-introduction">
                   <h3 class="post-title">
-                    JDK8--元空间(Metaspace)替换永久代(PermGen)
+                    随谈Java - （二）内存区域
                   </h3>
                 </a>
               </div>

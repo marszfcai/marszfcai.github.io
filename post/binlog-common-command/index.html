@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>随谈Java - （一）类文件结构 | Marszfcai</title>
+<title>解析binlog 常用命令 | Marszfcai</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -84,127 +84,54 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">随谈Java - （一）类文件结构</h2>
+            <h2 class="post-title">解析binlog 常用命令</h2>
             <div class="post-date">2019-12-21</div>
             
             <div class="post-content">
-              <p>介绍Java类个关键字作用</p>
-<!-- more -->
-<h4 id="1package">（1）package</h4>
-<h4 id="2import">（2）import</h4>
-<p><strong>作用</strong>：编译时期编译器搜索查找并补全代码中省略的类全名</p>
-<pre><code class="language-java">// 不使用import
-public void test() {
-    java.util.ArrayList list = new java.util.ArrayList();
-}
-
-// 使用import
-import java.util.ArrayList;
-
-public void test() {
-    ArrayList list = new ArrayList();
-}
+              <!-- more -->
+<h3 id="一-mysql命令sql">一、MySQL命令（sql）</h3>
+<h4 id="查看是否开启binlog">查看是否开启binlog</h4>
+<pre><code class="language-sql">SHOW VARIABLES LIKE 'log_bin'; -- ON为开启
 </code></pre>
-<h4 id="3类声名">（3）类声名</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>abstract</td>
-<td>抽象类,不可被实例化</td>
-</tr>
-<tr>
-<td>final</td>
-<td>不可被子类继承</td>
-</tr>
-<tr>
-<td>strictfp</td>
-<td>精确浮点计算</td>
-</tr>
-</tbody>
-</table>
-<h4 id="4变量">（4）变量</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>static</td>
-<td>不需要实例化类对象即可访问</td>
-</tr>
-<tr>
-<td>transient</td>
-<td>该变量不会被序列化和反序列化 ( 注：static的变量也不会被序列化和反序列化 )</td>
-</tr>
-<tr>
-<td>volatile</td>
-<td>保证内存可见性、禁止指令重排序</td>
-</tr>
-<tr>
-<td>final</td>
-<td>表示该变量为常量,只可以被初始化一次,且赋值之后不可改变</td>
-</tr>
-</tbody>
-</table>
-<h4 id="5方法">（5）方法</h4>
-<table>
-<thead>
-<tr>
-<th>关键字</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>static</td>
-<td>不需要实例化类对象即可调用</td>
-</tr>
-<tr>
-<td>final</td>
-<td>不可被子类重写覆盖</td>
-</tr>
-<tr>
-<td>abstract</td>
-<td>相当于接口方法,没有方法体,但有抽象方法的类必须声明为抽象类</td>
-</tr>
-<tr>
-<td>synchronized</td>
-<td>同步锁</td>
-</tr>
-<tr>
-<td>strictfp</td>
-<td>精确浮点计算</td>
-</tr>
-<tr>
-<td>native</td>
-<td>本地方法(C++方法)</td>
-</tr>
-</tbody>
-</table>
-<h4 id="6代码块">（6）代码块</h4>
-<p><strong>普通代码块</strong>: 也称作构造代码块,在类实例化的时候调用,优先于构造函数执行</p>
-<p><strong>静态代码块</strong>: 类加载即执行,只加载一次</p>
-<h4 id="7内部类">（7）内部类</h4>
+<h4 id="查看binlog存放位置">查看binlog存放位置</h4>
+<pre><code class="language-sql">SHOW VARIABLES LIKE 'datadir';
+-- 或者由 `my.cnf` / `my.ini` 文件指定
+-- log-bin=/usr/logs/mysql-bin
+</code></pre>
+<h4 id="查看binlog日志列表">查看binlog日志列表</h4>
+<pre><code class="language-sql">SHOW MASTER logs;
+</code></pre>
+<h3 id="二-使用mysqlbinlog工具解析shell">二、使用mysqlbinlog工具解析（shell）</h3>
+<h4 id="指定数据库">指定数据库</h4>
+<pre><code class="language-shell">mysqlbinlog -database #databaseName mysqld-bin.000001
+</code></pre>
+<h4 id="格式化">格式化</h4>
+<pre><code class="language-shell">mysqlbinlog --base64-output=decode-rows -v mysqld-bin.000001
+# 或者
+mysqlbinlog --base64-output=decode-rows -vv mysqld-bin.000001
+</code></pre>
+<h4 id="获取指定时间段">获取指定时间段</h4>
+<pre><code class="language-shell"># [start_datetime,stop_datetime)
+mysqlbinlog --start-datetime=&quot;2017-08-16 10:00:00&quot; --stop-datetime=&quot;2017-01-09 18:00:00&quot; mysqld-bin.000001
+</code></pre>
+<h3 id="三-结合grep命令">三、结合grep命令</h3>
+<pre><code class="language-shell"># 临时文件
+mysqlbinlog --base64-output=decode-rows -v mysqld-bin.000001 &gt; temp.sql
+
+# 找出匹配'tableName'的sql 
+grep -w tableName temp.sql &gt; output.sql
+</code></pre>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://marszfcai.github.io/tag/TUk0TXrAv" class="tag">
-                    随谈Java
+                  <a href="https://marszfcai.github.io/tag/KsB-mJU0_" class="tag">
+                    mysql
                   </a>
                 
-                  <a href="https://marszfcai.github.io/tag/TGqWEGpt9" class="tag">
-                    java
+                  <a href="https://marszfcai.github.io/tag/cGmR7qDI1n" class="tag">
+                    binlog
                   </a>
                 
               </div>
@@ -212,9 +139,9 @@ public void test() {
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://marszfcai.github.io/post/jdk8-metaspace-to-permgen">
+                <a href="https://marszfcai.github.io/post/java-object-lifecycle">
                   <h3 class="post-title">
-                    JDK8--元空间(Metaspace)替换永久代(PermGen)
+                    随谈Java -  (三) 对象的生命周期
                   </h3>
                 </a>
               </div>
