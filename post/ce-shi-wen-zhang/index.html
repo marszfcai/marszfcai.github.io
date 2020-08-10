@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>解析binlog 常用命令 | Marszfcai</title>
+<title>测试文章 | Marszfcai</title>
 <meta name="description" content="温故而知新">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -84,64 +84,20 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">解析binlog 常用命令</h2>
-            <div class="post-date">2019-12-21</div>
+            <h2 class="post-title">测试文章</h2>
+            <div class="post-date">2020-08-10</div>
             
             <div class="post-content">
-              <!-- more -->
-<h3 id="一-mysql命令sql">一、MySQL命令（sql）</h3>
-<h4 id="查看是否开启binlog">查看是否开启binlog</h4>
-<pre><code class="language-sql">SHOW VARIABLES LIKE 'log_bin'; -- ON为开启
-</code></pre>
-<h4 id="查看binlog存放位置">查看binlog存放位置</h4>
-<pre><code class="language-sql">SHOW VARIABLES LIKE 'datadir';
--- 或者由 `my.cnf` / `my.ini` 文件指定
--- log-bin=/usr/logs/mysql-bin
-</code></pre>
-<h4 id="查看binlog日志列表">查看binlog日志列表</h4>
-<pre><code class="language-sql">SHOW MASTER logs;
-</code></pre>
-<h3 id="二-使用mysqlbinlog工具解析shell">二、使用mysqlbinlog工具解析（shell）</h3>
-<h4 id="指定数据库">指定数据库</h4>
-<pre><code class="language-shell">mysqlbinlog -database #databaseName mysqld-bin.000001
-</code></pre>
-<h4 id="格式化">格式化</h4>
-<pre><code class="language-shell">mysqlbinlog --base64-output=decode-rows -v mysqld-bin.000001
-# 或者
-mysqlbinlog --base64-output=decode-rows -vv mysqld-bin.000001
-</code></pre>
-<h4 id="获取指定时间段">获取指定时间段</h4>
-<pre><code class="language-shell"># [start_datetime,stop_datetime)
-mysqlbinlog --start-datetime=&quot;2017-08-16 10:00:00&quot; --stop-datetime=&quot;2017-01-09 18:00:00&quot; mysqld-bin.000001
-</code></pre>
-<h3 id="三-结合grep命令">三、结合grep命令</h3>
-<pre><code class="language-shell"># 临时文件
-mysqlbinlog --base64-output=decode-rows -v mysqld-bin.000001 &gt; temp.sql
-
-# 找出匹配'tableName'的sql 
-grep -w tableName temp.sql &gt; output.sql
-</code></pre>
+              <p>ttt<img src="https://marszfcai.github.io/post-images/1597064551970.png" alt=""></p>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://marszfcai.github.io/tag/KsB-mJU0_" class="tag">
-                    mysql
-                  </a>
-                
-                  <a href="https://marszfcai.github.io/tag/cGmR7qDI1n" class="tag">
-                    binlog
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://marszfcai.github.io/post/java-object-lifecycle">
+                <a href="https://marszfcai.github.io/post/check-java-pid">
                   <h3 class="post-title">
-                    随谈Java - （三）对象的生命周期
+                    如何查看java进程
                   </h3>
                 </a>
               </div>
